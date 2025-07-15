@@ -24,6 +24,9 @@ async function run() {
     // await client.connect();
 
     const jobCollection = client.db("jobPortal").collection("jobs");
+    const jobApplicationCollection = client
+      .db("jobPortal")
+      .collection("job_applications");
     app.get("/jobs", async (req, res) => {
       const result = await jobCollection.find().toArray();
       res.send(result);
@@ -32,6 +35,17 @@ async function run() {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await jobCollection.findOne(query);
+      res.send(result);
+    });
+    app.get("/job-application", async (req, res) => {
+      const email = req.query.email;
+      const query = { applicant_email: email };
+      const result = await jobApplicationCollection.find(query).toArray();
+      res.send(result);
+    });
+    app.post("/job-application", async (req, res) => {
+      const application = req.body;
+      const result = await jobApplicationCollection.insertOne(application);
       res.send(result);
     });
     // await client.db("admin").command({ ping: 1 });
