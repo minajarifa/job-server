@@ -21,14 +21,23 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    // await client.connect();
+    // await client.connect()
 
     const jobCollection = client.db("jobPortal").collection("jobs");
     const jobApplicationCollection = client
       .db("jobPortal")
       .collection("job_applications");
+    // jobs related api
     app.get("/jobs", async (req, res) => {
-      const result = await jobCollection.find().toArray();
+      // extra start
+      const email = req.query.email;
+      let query = {};
+      if (email) {
+        query = { hr_email: email };
+      }
+      // extra end
+      console.log(email);
+      const result = await jobCollection.find(query).toArray();
       res.send(result);
     });
     app.get("/jobs/:id", async (req, res) => {
@@ -55,9 +64,44 @@ async function run() {
       }
       res.send(result);
     });
-    app.post("/job-application", async (req, res) => {
+    // add job
+    app.post("/jobs", async (req, res) => {
+      const newJob = req.body;
+      const result = await jobCollection.insertOne(newJob);
+      res.send(result);
+    });
+    // get
+    app.get("/job-applications/jobs/:job_id", async (req, res) => {
+      const jobId = req.params.job_id;
+      const query = { job_id: jobId };
+      const result = await jobApplicationCollection.find(query).toArray();
+      res.send(result);
+
+    });
+    // job application api
+    app.post("/job-applications", async (req, res) => {
       const application = req.body;
       const result = await jobApplicationCollection.insertOne(application);
+      // not the best way start
+      // find a data from job collection and set applicationCount data
+      const id = application.job_id;
+      const query = { _id: new ObjectId(id) };
+      const job = await jobCollection.findOne(query);
+      let newCount = 0;
+      if (job.applicationCount) {
+        newCount = job.applicationCount + 1;
+      } else {
+        newCount = 1;
+      }
+      // not the best way end
+      // now update the job info applicationCount
+      const filter = { _id: new ObjectId(id) };
+      const updateDoc = {
+        $set: {
+          applicationCount: newCount,
+        },
+      };
+      const updateResult = await jobCollection.updateOne(filter, updateDoc);
       res.send(result);
     });
     app.delete("/deleteApplication/:id", async (req, res) => {
@@ -66,12 +110,12 @@ async function run() {
       const result = await jobApplicationCollection.deleteOne(query);
       res.send(result);
     });
-    // await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 })
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
   } finally {
-    // await client.close();
+    // await client.close()
   }
 }
 run().catch(console.dir);
