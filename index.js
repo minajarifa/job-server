@@ -114,7 +114,7 @@ async function run() {
       const id = req.params.id;
       const data = req.body;
       filter: {
-        _id: new ObjectId(id);
+        _id: new ObjectId(id); 
       }
       const upDateDoc = {
         $set: data.status,
