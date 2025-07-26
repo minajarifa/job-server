@@ -28,6 +28,10 @@ async function run() {
       .db("jobPortal")
       .collection("job_applications");
 
+      // Auth related apis star
+      
+      // Auth related apis end
+
     // jobs related api
     app.get("/jobs", async (req, res) => {
       // extra start
@@ -113,13 +117,13 @@ async function run() {
     app.patch(`/job-applications/:id`, async (req, res) => {
       const id = req.params.id;
       const data = req.body;
-      filter: {
-        _id: new ObjectId(id); 
+    const filter= {
+        _id: new ObjectId(id)
       }
-      const upDateDoc = {
-        $set: data.status,
+      const updateDoc = {
+        $set:{status: data.status},
       };
-      const result = await jobApplicationCollection.updateOne(filter, upDateDoc);
+      const result = await jobApplicationCollection.updateOne(filter, updateDoc);
       res.send(result)
     });
 
