@@ -4,7 +4,7 @@ const app = express();
 require("dotenv").config({ quiet: true });
 const port = process.env.PORT || 1000;
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
-
+const jwt = require("jsonwebtoken");
 app.use(cors());
 app.use(express.json());
 
@@ -28,9 +28,14 @@ async function run() {
       .db("jobPortal")
       .collection("job_applications");
 
-      // Auth related apis star
-      
-      // Auth related apis end
+    // Auth related apis star
+    app.post("/jwt", async (req, res) => {
+      const user = req.body;
+      const token = jwt.sign(user, "token", { expiresIn: "5m" });
+      console.log(token)
+      res.send(token);
+    });
+    // Auth related apis end
 
     // jobs related api
     app.get("/jobs", async (req, res) => {
@@ -117,14 +122,17 @@ async function run() {
     app.patch(`/job-applications/:id`, async (req, res) => {
       const id = req.params.id;
       const data = req.body;
-    const filter= {
-        _id: new ObjectId(id)
-      }
-      const updateDoc = {
-        $set:{status: data.status},
+      const filter = {
+        _id: new ObjectId(id),
       };
-      const result = await jobApplicationCollection.updateOne(filter, updateDoc);
-      res.send(result)
+      const updateDoc = {
+        $set: { status: data.status },
+      };
+      const result = await jobApplicationCollection.updateOne(
+        filter,
+        updateDoc
+      );
+      res.send(result);
     });
 
     app.delete("/deleteApplication/:id", async (req, res) => {
