@@ -39,9 +39,10 @@ async function run() {
       
       res
       .cookie('token',token,{
-        httpOnly:true
+        httpOnly:true,
+        secure:true
       })
-      .send(token);
+      .send({success:true});
     });
     // Auth related apis end
 
