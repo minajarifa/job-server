@@ -28,10 +28,10 @@ async function run() {
       .db("jobPortal")
       .collection("job_applications");
 
-    // Auth related apis star
+    // Auth related apis star to do
     app.post("/jwt", async (req, res) => {
       const user = req.body;
-      const token = jwt.sign(user, "token", { expiresIn: "5m" });
+      const token = jwt.sign(user, "token", { expiresIn: "1h" });
       console.log(token)
       res.send(token);
     });
