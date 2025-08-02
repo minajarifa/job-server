@@ -36,8 +36,12 @@ async function run() {
       const token = jwt.sign(user, process.env.JWT_SECRRET, {
         expiresIn: "1h",
       });
-      console.log(token);
-      res.send(token);
+      
+      res
+      .cookie('token',token,{
+        httpOnly:true
+      })
+      .send(token);
     });
     // Auth related apis end
 
