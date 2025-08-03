@@ -78,6 +78,7 @@ async function run() {
     app.get("/job-application", async (req, res) => {
       const email = req.query.email;
       const query = { applicant_email: email };
+      console.log('cok cok cok ',req.cookies)
       const result = await jobApplicationCollection.find(query).toArray();
       for (const application of result) {
         // console.log(application.job_id);
