@@ -6,7 +6,16 @@ require("dotenv").config({ quiet: true });
 const port = process.env.PORT || 1000;
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const jwt = require("jsonwebtoken");
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "https://job-portal-f18ce.firebaseapp.com",
+      "https://job-portal-f18ce.web.app",
+      "http://localhost:5173"
+    ],
+    credentials:true
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 
@@ -36,13 +45,12 @@ async function run() {
       const token = jwt.sign(user, process.env.JWT_SECRRET, {
         expiresIn: "1h",
       });
-      
       res
-      .cookie('token',token,{
-        httpOnly:true,
-        secure:true
-      })
-      .send({success:true});
+        .cookie("token", token, {
+          httpOnly: true,
+          secure: true,
+        })
+        .send({ success: true });
     });
     // Auth related apis end
 
