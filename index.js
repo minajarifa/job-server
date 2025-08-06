@@ -79,7 +79,7 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/job-application", async (req, res) => {
+    app.get("/job-application",logger, async (req, res) => {
       const email = req.query.email;
       const query = { applicant_email: email };
 
