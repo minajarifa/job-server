@@ -12,12 +12,16 @@ app.use(
       "https://job-portal-f18ce.firebaseapp.com",
       "https://job-portal-f18ce.web.app",
       "http://localhost:5173",
-    ],
+    ], 
     credentials: true,
   })
 );
 app.use(cookieParser());
 app.use(express.json());
+const logger = (req,res,next)=>{
+  console.log('insite the logger')
+  next()
+}
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.63qrdth.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -48,7 +52,7 @@ async function run() {
       res
         .cookie("token", token, {
           httpOnly: true,
-          secure: true,
+          secure: false,
         })
         .send({ success: true });
     });
@@ -78,8 +82,10 @@ async function run() {
     app.get("/job-application", async (req, res) => {
       const email = req.query.email;
       const query = { applicant_email: email };
+
       // ______TODO________________
       console.log("cok cok cookies ", req?.cookies);
+
       const result = await jobApplicationCollection.find(query).toArray();
       for (const application of result) {
         // console.log(application.job_id);
