@@ -32,6 +32,7 @@ const verifyTiken = (req, res, next) => {
     if (err) {
     return res.status(401).send({message:"Unauthorized access"})
     }
+    req.user= decoded
     next();
   });
 };
@@ -93,9 +94,11 @@ async function run() {
     });
 
     app.get("/job-application", logger, verifyTiken, async (req, res) => {
-      console.log("on inside the api callback");
       const email = req.query.email;
       const query = { applicant_email: email };
+      if(req.user.email!== req.query.email){
+        return res.status(403).send({message:"forbiden access"})
+      }
       const result = await jobApplicationCollection.find(query).toArray();
       for (const application of result) {
         // console.log(application.job_id);
