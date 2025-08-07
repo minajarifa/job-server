@@ -22,6 +22,9 @@ const logger = (req,res,next)=>{
   console.log('insite the logger')
   next()
 }
+const verifyTiken=(req,res,next)=>{
+console.log()
+}
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.63qrdth.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
