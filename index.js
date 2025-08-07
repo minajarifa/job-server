@@ -24,7 +24,7 @@ const logger = (req, res, next) => {
 };
 const verifyTiken = (req, res, next) => {
    // ______TODO________________
-      console.log("cok cok cookies ", req?.cookies);
+      console.log("cok cok cookies ", req?.cookies?.token);
   next()
 };
 
