@@ -1,11 +1,11 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
 const cors = require("cors");
 const app = express();
 const cookieParser = require("cookie-parser");
 require("dotenv").config({ quiet: true });
 const port = process.env.PORT || 1000;
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
-const jwt = require("jsonwebtoken");
 app.use(
   cors({
     origin: [
@@ -22,8 +22,9 @@ const logger = (req, res, next) => {
   console.log("insite the logger");
   next();
 };
-const verifyTiken = (req, res, next) => {
-  // ______TODO________________
+
+
+const verifyToken = (req, res, next) => {
   const token = req?.cookies?.token;
   if (!token) {
     return res.status(401).send({ message: "Unauthorized access" });
@@ -93,7 +94,7 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/job-application", logger, verifyTiken, async (req, res) => {
+    app.get("/job-application", logger, verifyToken, async (req, res) => {
       const email = req.query.email;
       const query = { applicant_email: email };
       // req.user.email to find middlleWare 
