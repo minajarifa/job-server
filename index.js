@@ -23,7 +23,8 @@ const logger = (req, res, next) => {
   next();
 };
 const verifyTiken = (req, res, next) => {
-  console.log("verify token ");
+   // ______TODO________________
+      console.log("cok cok cookies ", req?.cookies);
   next()
 };
 
@@ -86,11 +87,7 @@ async function run() {
     app.get("/job-application", logger,verifyTiken, async (req, res) => {
       console.log("on inside the api callback");
       const email = req.query.email;
-      const query = { applicant_email: email };
-
-      // ______TODO________________
-      console.log("cok cok cookies ", req?.cookies);
-
+      const query = { applicant_email: email }
       const result = await jobApplicationCollection.find(query).toArray();
       for (const application of result) {
         // console.log(application.job_id);
