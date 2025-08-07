@@ -96,6 +96,7 @@ async function run() {
     app.get("/job-application", logger, verifyTiken, async (req, res) => {
       const email = req.query.email;
       const query = { applicant_email: email };
+      // req.user.email to find middlleWare 
       if(req.user.email!== req.query.email){
         return res.status(403).send({message:"forbiden access"})
       }
