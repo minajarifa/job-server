@@ -23,9 +23,17 @@ const logger = (req, res, next) => {
   next();
 };
 const verifyTiken = (req, res, next) => {
-   // ______TODO________________
-      console.log("cok cok cookies ", req?.cookies?.token);
-  next()
+  // ______TODO________________
+  const token = req?.cookies?.token;
+  if (!token) {
+    return res.status(401).send({ message: "Unauthorized access" });
+  }
+  jwt.verify(token, process.env.JWT_SECRRET, (err, decoded) => {
+    if (err) {
+    return res.status(401).send({message:"Unauthorized access"})
+    }
+    next();
+  });
 };
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.63qrdth.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
@@ -84,10 +92,10 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/job-application", logger,verifyTiken, async (req, res) => {
+    app.get("/job-application", logger, verifyTiken, async (req, res) => {
       console.log("on inside the api callback");
       const email = req.query.email;
-      const query = { applicant_email: email }
+      const query = { applicant_email: email };
       const result = await jobApplicationCollection.find(query).toArray();
       for (const application of result) {
         // console.log(application.job_id);
