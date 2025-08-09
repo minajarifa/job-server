@@ -71,7 +71,7 @@ async function run() {
     // Auth related apis end
 
     // jobs related api
-    app.get("/jobs", async (req, res) => {
+    app.get("/jobs",verifyToken, async (req, res) => {
       // extra start
       const email = req.query.email;
       let query = {};
