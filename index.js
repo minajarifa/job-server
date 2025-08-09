@@ -63,15 +63,27 @@ async function run() {
       const token = jwt.sign(user, process.env.JWT_SECRRET, {
         expiresIn: "1h",
       });
-      res.cookie("token",token,{
-        httpOnly:true,
-        secure:false
-      }).send({successs:true})
+      res
+        .cookie("token", token, {
+          httpOnly: true,
+          secure: false,
+        })
+        .send({ successs: true });
     });
     // Auth related apis end
 
+    // clear related cookie
+    app.post("/logout", async (req, res) => {
+      res
+        .clearCookie("token", {
+          httpOnly: true,
+          secure: false,
+        })
+        .send({ success: true });
+    });
+
     // jobs related api
-    app.get("/jobs",verifyToken, async (req, res) => {
+    app.get("/jobs", verifyToken, async (req, res) => {
       // extra start
       const email = req.query.email;
       let query = {};
