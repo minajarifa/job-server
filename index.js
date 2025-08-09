@@ -59,18 +59,21 @@ async function run() {
       .collection("job_applications");
 
     // Auth related apis star to do
-    app.post("/jwt", async (req, res) => {
-      const user = req.body;
-      const token = jwt.sign(user, process.env.JWT_SECRRET, {
-        expiresIn: "1h",
-      });
-      res
-        .cookie("token", token, {
-          httpOnly: true,
-          secure: false,
-        })
-        .send({ success: true });
-    });
+    app.post('jwt',async(req,res)=>{
+      
+    })
+    // app.post("/jwt", async (req, res) => {
+    //   const user = req.body;
+    //   const token = jwt.sign(user, process.env.JWT_SECRRET, {
+    //     expiresIn: "1h",
+    //   });
+    //   res
+    //     .cookie("token", token, {
+    //       httpOnly: true,
+    //       secure: false,
+    //     })
+    //     .send({ success: true });
+    // });
     // Auth related apis end
 
     // jobs related api
