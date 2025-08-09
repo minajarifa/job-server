@@ -23,7 +23,6 @@ const logger = (req, res, next) => {
   next();
 };
 
-
 const verifyToken = (req, res, next) => {
   const token = req?.cookies?.token;
   if (!token) {
@@ -31,9 +30,9 @@ const verifyToken = (req, res, next) => {
   }
   jwt.verify(token, process.env.JWT_SECRRET, (err, decoded) => {
     if (err) {
-    return res.status(401).send({message:"Unauthorized access"})
+      return res.status(401).send({ message: "Unauthorized access" });
     }
-    req.user= decoded
+    req.user = decoded;
     next();
   });
 };
@@ -59,9 +58,16 @@ async function run() {
       .collection("job_applications");
 
     // Auth related apis star to do
-    app.post('jwt',async(req,res)=>{
-      
-    })
+    app.post("jwt", async (req, res) => {
+      const user = req.body;
+      const token = jwt.sign(user, process.env.JWT_SECRRET, {
+        expiresIn: "1h",
+      });
+      res.cookie("token",token,{
+        httpOnly:true,
+        secure:false
+      }).send({successs:true})
+    });
     // app.post("/jwt", async (req, res) => {
     //   const user = req.body;
     //   const token = jwt.sign(user, process.env.JWT_SECRRET, {
@@ -100,9 +106,9 @@ async function run() {
     app.get("/job-application", logger, verifyToken, async (req, res) => {
       const email = req.query.email;
       const query = { applicant_email: email };
-      // req.user.email to find middlleWare 
-      if(req.user.email!== req.query.email){
-        return res.status(403).send({message:"forbiden access"})
+      // req.user.email to find middlleWare
+      if (req.user.email !== req.query.email) {
+        return res.status(403).send({ message: "forbiden access" });
       }
       const result = await jobApplicationCollection.find(query).toArray();
       for (const application of result) {
