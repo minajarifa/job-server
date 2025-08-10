@@ -19,7 +19,7 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 const logger = (req, res, next) => {
-  console.log("insite the logger");
+  console.log(req.cookies.token);
   next();
 };
 
@@ -103,7 +103,7 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/job-application", logger, verifyToken, async (req, res) => {
+    app.get("/job-application", verifyToken,logger, async (req, res) => {
       const email = req.query.email;
       const query = { applicant_email: email };
       // req.user.email to find middlleWare
