@@ -83,7 +83,7 @@ async function run() {
     });
 
     // jobs related api
-    app.get("/jobs", verifyToken, async (req, res) => {
+    app.get("/jobs", async (req, res) => {
       // extra start
       const email = req.query.email;
       let query = {};
@@ -103,7 +103,7 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/job-application", verifyToken,logger, async (req, res) => {
+    app.get("/job-application", verifyToken, logger, async (req, res) => {
       const email = req.query.email;
       const query = { applicant_email: email };
       // req.user.email to find middlleWare
