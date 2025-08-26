@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 require("dotenv").config({ quiet: true });
 const port = process.env.PORT || 1000;
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+const { use } = require("react");
 app.use(
   cors({
     origin: [
