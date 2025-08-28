@@ -6,7 +6,6 @@ const cookieParser = require("cookie-parser");
 require("dotenv").config({ quiet: true });
 const port = process.env.PORT || 1000;
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
-const { use } = require("react");
 app.use(
   cors({
     origin: [
@@ -104,7 +103,7 @@ async function run() {
       res.send(result);
     });
 
-    app.get("/job-application", verifyToken, logger, async (req, res) => {
+    app.get("/job-application",verifyToken, async (req, res) => {
       const email = req.query.email;
       const query = { applicant_email: email };
       // req.user.email to find middlleWare
