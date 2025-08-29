@@ -83,7 +83,7 @@ async function run() {
     });
 
     // jobs related api
-    app.get("/jobs", async (req, res) => {
+    app.get("/jobs",verifyToken, async (req, res) => {
       // extra start
       const email = req.query.email;
       let query = {};
@@ -142,8 +142,9 @@ async function run() {
     });
 
     // job application api
-    app.post("/job-applications", async (req, res) => {
+    app.post("/job-applications",verifyToken, async (req, res) => {
       const application = req.body;
+      console.log("application",application)
       const result = await jobApplicationCollection.insertOne(application);
       // not the best way start
       // find a data from job collection and set applicationCount data
