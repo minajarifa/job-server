@@ -200,11 +200,9 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
 app.get("/", (req, res) => {
   res.send("job are falling are the sky");
 });
-
 app.listen(port, () => {
   console.log(`job is waiting: ${port}`);
 });
